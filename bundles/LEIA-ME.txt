@@ -1,0 +1,4 @@
+Esta pasta guarda os pacotes de atualizacao (.zip) gerados pelo script
+publicar-atualizacao.js (que fica no projeto do APK).
+
+NAO apague esta pasta: e daqui que os celulares baixam as novas versoes.
