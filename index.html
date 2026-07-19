@@ -209,13 +209,14 @@ html[data-theme="light"] nav.bottom{background:rgba(255,255,255,.92)}
 /* ================= DRAWER ================= */
 .drawer-bk{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; opacity:0;
   pointer-events:none; transition:opacity .25s}
-.drawer{position:fixed; top:0; bottom:0; left:50%; width:300px; z-index:41;
-  transform:translateX(calc(-50% - min(260px,50vw) - 320px)); transition:transform .28s ease;
+.drawer{position:fixed; top:0; bottom:0; left:0; z-index:41;
+  width:86vw; max-width:322px; box-sizing:border-box;
+  margin-left:-340px; transition:margin-left .28s ease;
   background:linear-gradient(180deg,#0a3a1e,#051f10); border-right:1px solid var(--line);
   padding:calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));
-  overflow-y:auto; border-radius:0 22px 22px 0}
+  overflow-y:auto; overflow-x:hidden; border-radius:0 22px 22px 0}
 html[data-theme="light"] .drawer{background:#fff}
-body.drawer-open .drawer{transform:translateX(calc(-50% - min(260px,50vw) + 0px))}
+body.drawer-open .drawer{margin-left:0}
 body.drawer-open .drawer-bk{opacity:1; pointer-events:auto}
 .d-head{display:flex; align-items:center; gap:12px; padding:6px 6px 16px;
   border-bottom:1px solid var(--line-soft); margin-bottom:12px}
@@ -230,6 +231,16 @@ body.drawer-open .drawer-bk{opacity:1; pointer-events:auto}
 .d-item.active{background:var(--gold-dim); color:var(--gold)}
 .d-foot{margin-top:16px; padding-top:12px; border-top:1px solid var(--line-soft);
   font-size:11.5px; color:var(--muted-2); text-align:center}
+.lang-sect{margin-top:14px; padding-top:12px; border-top:1px solid var(--line-soft)}
+.lang-title{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:800;
+  letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin:0 4px 8px}
+.lang-title svg{width:16px;height:16px;color:var(--gold)}
+.lang-opts{display:flex; flex-direction:column; gap:6px}
+.lang-opt{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px;
+  border:1px solid var(--line-soft); background:transparent; color:var(--txt);
+  font-weight:700; font-size:13.5px; cursor:pointer; text-align:left; width:100%}
+.lang-opt .lang-flag{font-size:17px; line-height:1}
+.lang-opt.on{background:var(--gold-dim); border-color:rgba(255,212,0,.5); color:var(--gold)}
 
 /* ================= FORMULÁRIOS ================= */
 .field{margin-bottom:13px}
@@ -593,7 +604,7 @@ html[data-theme="light"] .modal{background:#fff}
    A ÚNICA COISA que você mexe aqui: aumente o APP_VERSION toda vez que
    publicar uma melhoria.  Ex.: 1.0.0  ->  1.0.1  ->  1.0.2  ->  1.1.0
    ============================================================================ */
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const OTA_URL = 'https://sandrolimadf1984.github.io/bancapro/version.json';
 /* ========================================================================== */
 
@@ -683,6 +694,180 @@ function otaBoot(){
   setTimeout(() => { otaCheck(false); }, 2500);
 }
 
+/* ============================================================================
+   ██  IDIOMAS (Português / English / Español)  ██
+   A camada abaixo TRADUZ o que aparece na tela sem mudar a lógica do app:
+   os valores internos continuam em português, só o texto exibido muda.
+   Português é o idioma-base; ao trocar, a tela é redesenhada e traduzida.
+   ============================================================================ */
+const IDIOMAS = [
+  { code:'pt', flag:'🇧🇷', nome:'Português' },
+  { code:'en', flag:'🇺🇸', nome:'English' },
+  { code:'es', flag:'🇪🇸', nome:'Español' },
+];
+let LANG = 'pt';
+
+const I18N = {
+  en: {
+    // menu / navegação
+    'Dashboard':'Dashboard','Inserir Aposta':'Add Bet','Meus Bilhetes':'My Bets','Histórico':'History',
+    'Estatísticas':'Statistics','Gestão de Banca':'Bankroll','Metas':'Goals','Agenda de Jogos':'Match Schedule',
+    'Inteligência Artificial':'Artificial Intelligence','Configurações':'Settings','Salvar agora':'Save now',
+    'Banca:':'Bankroll:',
+    // dashboard
+    'Bem-vindo ao BancaPro 👋':'Welcome to BancaPro 👋','Configurar banca':'Set up bankroll','Ver com exemplo':'View with example',
+    'SALDO DA BANCA':'BANKROLL BALANCE','Saldo de depósito':'Deposit balance','Saldo de bônus':'Bonus balance',
+    'Lucro total:':'Total profit:','Em jogo:':'In play:','Aportes':'Deposits','INSERIR SUA APOSTA':'ADD YOUR BET',
+    'MEUS BILHETES':'MY BETS','Veja suas apostas ativas e abertas':'See your active and open bets','SEU HISTÓRICO':'YOUR HISTORY',
+    'Acompanhe suas apostas finalizadas':'Track your settled bets','Resumo Geral':'Overview',
+    // subtítulos
+    'Como você quer montar seu bilhete?':'How do you want to build your bet?','Controle profissional do seu capital.':'Professional control of your capital.',
+    'Linha do tempo e desempenho das suas apostas.':'Timeline and performance of your bets.','Não perca as partidas que importam.':"Don't miss the matches that matter.",
+    'Objetivos claros mantêm a disciplina.':'Clear goals keep discipline.','Perfil, segurança e dados do aplicativo.':'Profile, security and app data.',
+    'Raio-x completo do seu desempenho.':'Full breakdown of your performance.','Todas as suas apostas em um só lugar.':'All your bets in one place.',
+    'Análise automática do seu histórico, direto dos seus dados.':'Automatic analysis of your history, straight from your data.',
+    'Registre todos os detalhes do seu bilhete.':'Record every detail of your bet.','Atualize os dados do bilhete.':'Update the bet details.',
+    'Adicione os jogos, informe a odd total e conclua.':'Add the games, enter the total odds and finish.','Monte várias seleções na mesma partida.':'Build several selections in the same match.',
+    // tipos de aposta
+    'Simples':'Single','Múltipla':'Multiple','Criar Aposta':'Bet Builder','Aposta Simples':'Single Bet','Aposta Múltipla':'Multiple Bet',
+    // labels de formulário
+    'Data (aposta realizada)':'Date (bet placed)','Data':'Date','Hora':'Time','País / competição':'Country / competition','Campeonato':'League',
+    'Time da casa':'Home team','Time visitante':'Away team','Time (para ser campeão)':'Team (to be champion)','Mercado':'Market',
+    'Sua seleção (especial)':'Your selection (special)','Sua seleção (palpite)':'Your selection (pick)','Odd':'Odds','Odd (cotação)':'Odds',
+    'Odd total do bilhete':'Total odds of the slip','Odd dessa partida (opcional)':'Odds for this match (optional)','Valor apostado (R$)':'Stake (R$)',
+    'Fonte da aposta (de onde sai o valor)':'Bet source (where the money comes from)','Casa de aposta':'Bookmaker','Observações':'Notes',
+    'Imagem do bilhete':'Bet slip image','Status da aposta':'Bet status','Resultado / Lucro real':'Result / Actual profit',
+    'Valor do cashout (R$)':'Cashout value (R$)','Valor recebido no cash out (R$)':'Amount received on cash out (R$)','Partida':'Match',
+    'Nome da meta':'Goal name','Alvo de lucro (R$)':'Profit target (R$)','Prob. estimada (%)':'Estimated prob. (%)','Anotação':'Note',
+    'Início':'Start','Fim':'End','Dias':'Days','Apostas/dia':'Bets/day','Odd média':'Average odds','Taxa de acerto (%)':'Win rate (%)',
+    'Seu nome':'Your name','Tipo de stake':'Stake type','Stake por aposta (%)':'Stake per bet (%)','Stop Loss (R$/dia)':'Stop Loss (R$/day)',
+    'Stop Win (R$/dia)':'Stop Win (R$/day)','Percentual (%)':'Percentage (%)','Valor (R$)':'Amount (R$)','Depósito (R$)':'Deposit (R$)','Bônus (R$)':'Bonus (R$)',
+    // seções
+    'Acesso Rápido':'Quick Access','Aparência e privacidade':'Appearance & privacy','Apostas finalizadas no mês':'Bets settled this month',
+    'Atualização':'Update','Banca (depósito e bônus)':'Bankroll (deposit & bonus)','Dados e exportação':'Data & export','Diagnóstico dos seus dados':'Your data check',
+    'Entradas (depósitos e bônus)':'Entries (deposits & bonuses)','Estratégia de Stake':'Stake Strategy','Meta em andamento':'Goal in progress',
+    'Notificações':'Notifications','Perfil':'Profile','Resumo do mês':'Monthly summary','Simulador de crescimento':'Growth simulator',
+    'Stop Loss / Stop Win diário':'Daily Stop Loss / Stop Win','Zona de risco':'Danger zone',
+    // mercados
+    'Resultado Final (1X2)':'Match Result (1X2)','Ambas Marcam (BTTS)':'Both Teams to Score (BTTS)','Over/Under Gols':'Over/Under Goals',
+    'Handicap Asiático':'Asian Handicap','Handicap Europeu':'European Handicap','Dupla Chance':'Double Chance','Escanteios':'Corners',
+    'Cartões':'Cards','Empate Anula (DNB)':'Draw No Bet (DNB)','Placar Exato':'Correct Score','Jogador p/ Marcar':'Player to Score',
+    'Aposta de longo prazo':'Long-term bet','Especiais':'Specials','Outro':'Other',
+    // construtor de seleção
+    'Âmbito / Período':'Scope / Period','Período':'Period','Tipo':'Type','Linha':'Line','Over Gols':'Over Goals','Under Gols':'Under Goals',
+    'Total':'Total','1º Tempo (HT)':'1st Half (HT)','2º Tempo':'2nd Half','Casa':'Home','Visitante':'Away','Empate':'Draw','Sim':'Yes','Não':'No',
+    // status / filtros
+    'Pendente':'Pending','Em andamento':'In progress','Ganha':'Won','Perdida':'Lost','Anulada':'Void','Cashout':'Cashout','Cash Out':'Cash Out',
+    'Em aberto':'Open','Todas':'All','Depósito':'Deposit','Bônus':'Bonus','Saque':'Withdrawal',
+    // ações / botões
+    'Salvar':'Save','Cancelar':'Cancel','Excluir':'Delete','Editar':'Edit','Confirmar':'Confirm','Voltar':'Back','Inserir':'Add',
+    'Salvar aposta':'Save bet','Adicionar jogo':'Add game','Concluir múltipla':'Finish multiple','Exportar':'Export',
+    'Exportar para Excel':'Export to Excel','Exportar CSV':'Export CSV','Relatório em PDF':'PDF report','Fazer backup':'Back up',
+    'Restaurar backup':'Restore backup','Apagar todos os dados':'Delete all data','Buscar atualizações':'Check for updates',
+    'Nova versão disponível':'New version available','Atualizar agora':'Update now','Agora não':'Not now',
+    // rodapé / idioma
+    'Idioma':'Language','Seus dados ficam no seu aparelho':'Your data stays on your device',
+  },
+  es: {
+    'Dashboard':'Panel','Inserir Aposta':'Añadir apuesta','Meus Bilhetes':'Mis apuestas','Histórico':'Historial',
+    'Estatísticas':'Estadísticas','Gestão de Banca':'Gestión de banca','Metas':'Metas','Agenda de Jogos':'Agenda de partidos',
+    'Inteligência Artificial':'Inteligencia Artificial','Configurações':'Configuración','Salvar agora':'Guardar ahora',
+    'Banca:':'Banca:',
+    'Bem-vindo ao BancaPro 👋':'Bienvenido a BancaPro 👋','Configurar banca':'Configurar banca','Ver com exemplo':'Ver con ejemplo',
+    'SALDO DA BANCA':'SALDO DE LA BANCA','Saldo de depósito':'Saldo de depósito','Saldo de bônus':'Saldo de bono',
+    'Lucro total:':'Beneficio total:','Em jogo:':'En juego:','Aportes':'Aportes','INSERIR SUA APOSTA':'AÑADIR TU APUESTA',
+    'MEUS BILHETES':'MIS APUESTAS','Veja suas apostas ativas e abertas':'Mira tus apuestas activas y abiertas','SEU HISTÓRICO':'TU HISTORIAL',
+    'Acompanhe suas apostas finalizadas':'Sigue tus apuestas finalizadas','Resumo Geral':'Resumen general',
+    'Como você quer montar seu bilhete?':'¿Cómo quieres armar tu apuesta?','Controle profissional do seu capital.':'Control profesional de tu capital.',
+    'Linha do tempo e desempenho das suas apostas.':'Línea de tiempo y rendimiento de tus apuestas.','Não perca as partidas que importam.':'No te pierdas los partidos que importan.',
+    'Objetivos claros mantêm a disciplina.':'Objetivos claros mantienen la disciplina.','Perfil, segurança e dados do aplicativo.':'Perfil, seguridad y datos de la app.',
+    'Raio-x completo do seu desempenho.':'Radiografía completa de tu rendimiento.','Todas as suas apostas em um só lugar.':'Todas tus apuestas en un solo lugar.',
+    'Análise automática do seu histórico, direto dos seus dados.':'Análisis automático de tu historial, directo de tus datos.',
+    'Registre todos os detalhes do seu bilhete.':'Registra todos los detalles de tu apuesta.','Atualize os dados do bilhete.':'Actualiza los datos de la apuesta.',
+    'Adicione os jogos, informe a odd total e conclua.':'Añade los partidos, indica la cuota total y finaliza.','Monte várias seleções na mesma partida.':'Arma varias selecciones en el mismo partido.',
+    'Simples':'Simple','Múltipla':'Combinada','Criar Aposta':'Crear apuesta','Aposta Simples':'Apuesta simple','Aposta Múltipla':'Apuesta combinada',
+    'Data (aposta realizada)':'Fecha (apuesta realizada)','Data':'Fecha','Hora':'Hora','País / competição':'País / competición','Campeonato':'Competición',
+    'Time da casa':'Equipo local','Time visitante':'Equipo visitante','Time (para ser campeão)':'Equipo (para ser campeón)','Mercado':'Mercado',
+    'Sua seleção (especial)':'Tu selección (especial)','Sua seleção (palpite)':'Tu selección (pronóstico)','Odd':'Cuota','Odd (cotação)':'Cuota',
+    'Odd total do bilhete':'Cuota total del boleto','Odd dessa partida (opcional)':'Cuota de este partido (opcional)','Valor apostado (R$)':'Importe apostado (R$)',
+    'Fonte da aposta (de onde sai o valor)':'Fuente de la apuesta (de dónde sale el importe)','Casa de aposta':'Casa de apuestas','Observações':'Observaciones',
+    'Imagem do bilhete':'Imagen del boleto','Status da aposta':'Estado de la apuesta','Resultado / Lucro real':'Resultado / Beneficio real',
+    'Valor do cashout (R$)':'Valor del cashout (R$)','Valor recebido no cash out (R$)':'Importe recibido en el cash out (R$)','Partida':'Partido',
+    'Nome da meta':'Nombre de la meta','Alvo de lucro (R$)':'Objetivo de beneficio (R$)','Prob. estimada (%)':'Prob. estimada (%)','Anotação':'Nota',
+    'Início':'Inicio','Fim':'Fin','Dias':'Días','Apostas/dia':'Apuestas/día','Odd média':'Cuota media','Taxa de acerto (%)':'Tasa de acierto (%)',
+    'Seu nome':'Tu nombre','Tipo de stake':'Tipo de stake','Stake por aposta (%)':'Stake por apuesta (%)','Stop Loss (R$/dia)':'Stop Loss (R$/día)',
+    'Stop Win (R$/dia)':'Stop Win (R$/día)','Percentual (%)':'Porcentaje (%)','Valor (R$)':'Importe (R$)','Depósito (R$)':'Depósito (R$)','Bônus (R$)':'Bono (R$)',
+    'Acesso Rápido':'Acceso rápido','Aparência e privacidade':'Apariencia y privacidad','Apostas finalizadas no mês':'Apuestas finalizadas en el mes',
+    'Atualização':'Actualización','Banca (depósito e bônus)':'Banca (depósito y bono)','Dados e exportação':'Datos y exportación','Diagnóstico dos seus dados':'Diagnóstico de tus datos',
+    'Entradas (depósitos e bônus)':'Entradas (depósitos y bonos)','Estratégia de Stake':'Estrategia de Stake','Meta em andamento':'Meta en curso',
+    'Notificações':'Notificaciones','Perfil':'Perfil','Resumo do mês':'Resumen del mes','Simulador de crescimento':'Simulador de crecimiento',
+    'Stop Loss / Stop Win diário':'Stop Loss / Stop Win diario','Zona de risco':'Zona de riesgo',
+    'Resultado Final (1X2)':'Resultado Final (1X2)','Ambas Marcam (BTTS)':'Ambos Marcan (BTTS)','Over/Under Gols':'Over/Under Goles',
+    'Handicap Asiático':'Hándicap Asiático','Handicap Europeu':'Hándicap Europeo','Dupla Chance':'Doble Oportunidad','Escanteios':'Córners',
+    'Cartões':'Tarjetas','Empate Anula (DNB)':'Empate Anula (DNB)','Placar Exato':'Resultado Exacto','Jogador p/ Marcar':'Jugador a Marcar',
+    'Aposta de longo prazo':'Apuesta a largo plazo','Especiais':'Especiales','Outro':'Otro',
+    'Âmbito / Período':'Ámbito / Periodo','Período':'Periodo','Tipo':'Tipo','Linha':'Línea','Over Gols':'Over Goles','Under Gols':'Under Goles',
+    'Total':'Total','1º Tempo (HT)':'1ª Parte (HT)','2º Tempo':'2ª Parte','Casa':'Local','Visitante':'Visitante','Empate':'Empate','Sim':'Sí','Não':'No',
+    'Pendente':'Pendiente','Em andamento':'En curso','Ganha':'Ganada','Perdida':'Perdida','Anulada':'Anulada','Cashout':'Cashout','Cash Out':'Cash Out',
+    'Em aberto':'Abiertas','Todas':'Todas','Depósito':'Depósito','Bônus':'Bono','Saque':'Retiro',
+    'Salvar':'Guardar','Cancelar':'Cancelar','Excluir':'Eliminar','Editar':'Editar','Confirmar':'Confirmar','Voltar':'Volver','Inserir':'Añadir',
+    'Salvar aposta':'Guardar apuesta','Adicionar jogo':'Añadir partido','Concluir múltipla':'Finalizar combinada','Exportar':'Exportar',
+    'Exportar para Excel':'Exportar a Excel','Exportar CSV':'Exportar CSV','Relatório em PDF':'Informe en PDF','Fazer backup':'Copia de seguridad',
+    'Restaurar backup':'Restaurar copia','Apagar todos os dados':'Borrar todos los datos','Buscar atualizações':'Buscar actualizaciones',
+    'Nova versão disponível':'Nueva versión disponible','Atualizar agora':'Actualizar ahora','Agora não':'Ahora no',
+    'Idioma':'Idioma','Seus dados ficam no seu aparelho':'Tus datos quedan en tu dispositivo',
+  }
+};
+
+function tr(s){ if (LANG==='pt' || !s) return s; const d=I18N[LANG]; const k=String(s).trim(); return (d && d[k]) ? d[k] : s; }
+let _translating = false;
+function _trNode(n, d){
+  const raw = n.nodeValue; if (!raw) return; const key = raw.trim(); if (!key) return;
+  const t = d[key]; if (!t) return;
+  const p = n.parentNode;
+  // mantém o valor interno em português (senão selects/lógica quebram)
+  if (p && p.tagName === 'OPTION' && !p.hasAttribute('value')) p.setAttribute('value', key);
+  const lead = raw.match(/^\s*/)[0], trail = raw.match(/\s*$/)[0];
+  n.nodeValue = lead + t + trail;
+}
+function translateTree(root){
+  if (LANG==='pt' || !root) return;
+  const d = I18N[LANG]; if (!d) return;
+  try {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n => _trNode(n, d));
+    if (root.querySelectorAll) root.querySelectorAll('[placeholder]').forEach(el => {
+      const key = (el.getAttribute('placeholder')||'').trim(); if (d[key]) el.setAttribute('placeholder', d[key]);
+    });
+  } catch(e){}
+}
+function setupI18nObserver(){
+  if (window.__i18nObs) return;
+  const obs = new MutationObserver(muts => {
+    if (LANG==='pt') return;
+    const d = I18N[LANG]; if (!d) return;
+    _translating = true;
+    for (const m of muts) m.addedNodes.forEach(node => {
+      if (node.nodeType === 1) translateTree(node);
+      else if (node.nodeType === 3) _trNode(node, d);
+    });
+    _translating = false;
+  });
+  obs.observe(document.body, { childList:true, subtree:true });
+  window.__i18nObs = obs;
+}
+function setLang(code){
+  LANG = code;
+  S.settings.idioma = code;
+  save();
+  closeDrawer();
+  go(ROUTE, ROUTE_ARG, false);   // redesenha a tela atual a partir do português; o observer traduz
+  renderDrawer();
+  if (LANG!=='pt') { _translating = true; translateTree(document.body); _translating = false; }
+}
+
+
 /* ============================================================ ÍCONES */
 const IC = {
   menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M4 6h13M4 12h9M4 18h13"/></svg>',
@@ -702,6 +887,7 @@ const IC = {
   target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M19 5l2-2M19 5h-3m3 0V2" stroke-width="1.6"/></svg>',
   pie:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3a9 9 0 1 0 10 10H11z"/><path d="M13 2a9 9 0 0 1 9 9h-9z" opacity=".55"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5zm9 3.5a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L16 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L8 21h4l.4-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.2-.8.2-1.2z" transform="translate(1.5 0) scale(.92)"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>',
   calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
   brain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 3A3 3 0 0 0 6.6 5.2 3.3 3.3 0 0 0 4 8.4c0 .6.2 1.2.4 1.7A3.4 3.4 0 0 0 3 12.9c0 1.3.7 2.4 1.8 2.9A3.2 3.2 0 0 0 8 20.3c.6 0 1-.1 1.5-.4V3z"/><path d="M14.5 3a3 3 0 0 1 2.9 2.2 3.3 3.3 0 0 1 2.6 3.2c0 .6-.2 1.2-.4 1.7a3.4 3.4 0 0 1 1.4 2.8c0 1.3-.7 2.4-1.8 2.9a3.2 3.2 0 0 1-3.2 4.5c-.6 0-1-.1-1.5-.4V3z"/><path d="M9.5 8H7.4M9.5 13H6.8M14.5 8h2.1M14.5 13h2.7"/></svg>',
   wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h13v3"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1.3" fill="currentColor"/></svg>',
@@ -987,7 +1173,7 @@ const MESES_ABR = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','
 /* ============================================================ ESTADO */
 const blankData = () => ({
   version:1,
-  settings:{ nome:'', tema:'dark', ocultarSaldo:false, pinHash:null,
+  settings:{ nome:'', tema:'dark', idioma:'pt', ocultarSaldo:false, pinHash:null,
     stakeTipo:'percent', stakeValor:2, stopLoss:0, stopWin:0,
     notifPendentes:true, notifJogos:true, notifMetas:true, notifStops:true },
   banca:{ inicial:0, bonus:0, criadaEm:null },
@@ -1296,9 +1482,16 @@ function renderDrawer(){
     </div>
     ${MODULOS.map(m => `<div class="d-item ${m.r===ROUTE?'active':''}" data-r="${m.r}">${ic(m.icon)}<span>${m.label}</span></div>`).join('')}
     <div class="d-item d-save" data-save="1" style="margin-top:6px;background:rgba(255,212,0,.12);color:var(--gold);font-weight:800">${ic('download')}<span>Salvar agora</span></div>
+    <div class="lang-sect">
+      <div class="lang-title">${ic('globe')}<span>Idioma</span></div>
+      <div class="lang-opts">
+        ${IDIOMAS.map(l => `<button type="button" class="lang-opt ${LANG===l.code?'on':''}" data-lang="${l.code}"><span class="lang-flag">${l.flag}</span>${l.nome}</button>`).join('')}
+      </div>
+    </div>
     <div class="d-foot">BancaPro v${APP_VERSION} · Seus dados ficam no seu aparelho</div>`;
   $$('#drawer .d-item[data-r]').forEach(el => el.onclick = () => go(el.dataset.r));
   const sv = $('#drawer [data-save]'); if (sv) sv.onclick = salvarAgora;
+  $$('#drawer .lang-opt').forEach(b => b.onclick = () => setLang(b.dataset.lang));
 }
 function salvarAgora(){
   save(); Store.saveNow();
@@ -3326,6 +3519,9 @@ async function boot(){
       S.settings = Object.assign(blankData().settings, dados.settings || {});
     }
   } catch(e){ console.error(e); toast('Não foi possível ler os dados salvos', true); }
+  // idioma
+  LANG = (S.settings && S.settings.idioma) || 'pt';
+  setupI18nObserver();
   // migração: valores de banca inicial/bônus viram entradas na lista (para poder editar/excluir)
   S.banca = S.banca || { inicial:0, bonus:0, criadaEm:null };
   S.transacoes = S.transacoes || [];

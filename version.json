@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "url": "https://sandrolimadf1984.github.io/bancapro/bundles/bancapro-1.0.0.zip",
-  "checksum": "829537c93cade7346afbc5e09d2eee38c8985ac37ff7dc673ec14ff908b5a5bf",
-  "notas": "Primeira versao do BancaPro.",
-  "data": "2026-07-14"
+  "version": "1.0.1",
+  "url": "https://sandrolimadf1984.github.io/bancapro/bundles/bancapro-1.0.1.zip",
+  "checksum": "df6327acb901aa8997fc9fddcf0ffc76625b7050693d8358636a6265b25df957",
+  "notas": "Menu lateral corrigido (abria cortado) e novo seletor de idiomas: Portugues, Ingles e Espanhol.",
+  "data": "2026-07-16"
 }
