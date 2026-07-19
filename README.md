@@ -1,47 +1,71 @@
-# 📊 BancaPro — Gestão de Apostas
+<div align="center">
 
-Aplicativo web (arquivo único, funciona offline) para gerir apostas esportivas de forma
-profissional: banca com **depósito e bônus**, bilhetes **simples, múltiplas e criar aposta**,
-resolução **jogo a jogo** (Green/Red/Null), **Cash Out**, estatísticas, metas e muito mais.
-Os dados ficam salvos **no próprio aparelho** de cada pessoa (no navegador), então é seguro
-compartilhar o mesmo arquivo com qualquer um.
-Arquivo apenas para ter o seu controle sobre sua banca, não é possivel apostar através dele, apenas coloque a sua aposta que vc fez aqui no app e vai tendo um controle
+# 📊 BancaPro
 
----
+**Gestão profissional de apostas esportivas**
 
-## ✨ O que ele faz
+Registre seus bilhetes, controle sua banca e acompanhe seus resultados com dados de verdade.
 
-- **Banca (depósito + bônus):** saldo total em destaque e, abaixo, saldo de depósito e de
-  bônus separados. Ao apostar, você escolhe de qual conta sai o valor.
-- **Tipos de aposta:** Simples, Múltipla e Criar Aposta.
-- **Seletores inteligentes:** País → Campeonato, e times por competição (com opção de
-  digitar/excluir e memorização por campeonato).
-- **Seleção por mercado:** Resultado Final (1X2), Over/Under (com Casa/Visitante), Handicaps,
-  Dupla Chance, Escanteios, Cartões, Placar Exato, Jogador p/ Marcar, Aposta de longo prazo e Especiais.
-- **Múltipla resolvida jogo a jogo:** marque Green/Red/Null em cada jogo; um Red encerra como
-  perdida; ajuste de retorno quando um jogo é anulado.
-- **Cash Out** em simples e múltiplas.
-- **Estatísticas, metas, agenda e um resumo de IA** com insights do seu desempenho.
+[**▶ Abrir o app**](https://sandrolimadf1984.github.io/bancapro/)
+
+</div>
 
 ---
 
-## ▶️ Como usar
+## Sobre
 
-**Opção 1 — abrir direto:** baixe o `index.html` e abra com dois cliques no navegador
-(Chrome, Edge, etc.). Funciona no computador e no celular.
+O BancaPro é uma ferramenta de **registro e análise** para quem leva a sério a organização
+das próprias apostas. Ele não realiza apostas, não se conecta a casas de apostas e não
+movimenta dinheiro — é um caderno digital inteligente.
 
-**Opção 2 — publicar na internet (GitHub Pages):** siga o passo a passo abaixo para ter um
-**link** que você abre de qualquer lugar e compartilha com outras pessoas.
+Funciona **100% offline**, sem cadastro e sem anúncios. Todos os dados ficam salvos apenas
+no aparelho de quem usa.
+
+## Recursos
+
+- **Banca separada em depósito e bônus** — saldo total em destaque e cada conta discriminada
+- **Três tipos de bilhete** — simples, múltipla e criar aposta
+- **Múltipla resolvida jogo a jogo** — Green, Red ou Null em cada partida
+- **Cash Out** em bilhetes simples e múltiplos
+- **Seleções guiadas por mercado** — 1X2, Over/Under (total, tempos, casa e visitante),
+  handicaps, dupla chance, escanteios, cartões, placar exato, jogador para marcar e mais
+- **Times e campeonatos organizados** por país e competição, com cadastro próprio
+- **Estatísticas completas** — lucro, ROI, yield, taxa de acerto, evolução da banca e
+  desempenho por mercado, casa, faixa de odd e dia da semana
+- **Metas e agenda de jogos**
+- **Gestão de risco** — stake sugerida, stop loss e stop win diários
+- **Bloqueio por PIN**
+- **Três idiomas** — português, inglês e espanhol
+- **Atualização automática** — o app avisa quando há uma versão nova
+
+## Tecnologia
+
+Aplicativo de página única escrito em **HTML, CSS e JavaScript puro**, entregue como um
+**arquivo único** sem dependências externas em tempo de execução. Os gráficos usam Chart.js
+embutido e a persistência é feita no armazenamento local do navegador.
+
+A versão Android é empacotada com **Capacitor**, com sistema de atualização over-the-air.
+
+```
+bancapro/
+├── index.html                    aplicativo completo
+├── politica-de-privacidade.html  política de privacidade
+├── version.json                  controle de versão para atualizações
+└── bundles/                      pacotes de atualização
+```
+
+## Privacidade
+
+Nenhum dado é coletado, enviado ou compartilhado. Não há servidores, login, rastreamento
+ou publicidade. Leia a [política de privacidade](https://sandrolimadf1984.github.io/bancapro/politica-de-privacidade.html).
+
+## Aviso
+
+Destinado a maiores de 18 anos. Aposte com responsabilidade e apenas o que você pode perder.
+No Brasil, o CVV oferece apoio emocional gratuito pelo telefone **188**, 24 horas por dia.
 
 ---
 
-## 🔒 Privacidade dos dados
-
-Cada pessoa que abrir o app tem os **próprios dados**, guardados apenas no navegador do
-aparelho dela (armazenamento local). Nada é enviado para servidores. Se limpar os dados do
-navegador, o histórico é apagado.
-
----
-
-
-Feito com carinho para uso pessoal. ⚽📈
+<div align="center">
+Desenvolvido por <a href="https://github.com/sandrolimadf1984">Sandro Lima</a>
+</div>
