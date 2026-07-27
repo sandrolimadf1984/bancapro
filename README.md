@@ -70,4 +70,4 @@ CVV: 188 (gratuito, 24h).
 
 ---
 
-Sandro Lima — [@sandrolimadf1984](https://github.com/sandrolimadf1984)
+Sandro de Lima Pereira — [@sandrolimadf1984](https://github.com/sandrolimadf1984)
