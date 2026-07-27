@@ -1,3 +1,5 @@
+<img src="assets/logo.png" width="120" alt="BancaPro">
+
 # BancaPro
 
 Controle de banca e apostas esportivas. Arquivo único, roda offline, sem cadastro.
@@ -70,4 +72,4 @@ CVV: 188 (gratuito, 24h).
 
 ---
 
-Sandro de Lima Pereira — [@sandrolimadf1984](https://github.com/sandrolimadf1984)
+Sandro Lima — [@sandrolimadf1984](https://github.com/sandrolimadf1984)
