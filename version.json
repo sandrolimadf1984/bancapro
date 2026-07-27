@@ -1,7 +1,7 @@
 {
   "version": "1.0.1",
   "url": "https://sandrolimadf1984.github.io/bancapro/bundles/bancapro-1.0.1.zip",
-  "checksum": "df6327acb901aa8997fc9fddcf0ffc76625b7050693d8358636a6265b25df957",
-  "notas": "Menu lateral corrigido (abria cortado) e novo seletor de idiomas: Portugues, Ingles e Espanhol.",
-  "data": "2026-07-16"
+  "checksum": "a742c309b3020574d82cbbb6ec32b2c8ee0b1232fb22d5cf6860ed62c124c436",
+  "notas": "Organizacao interna do codigo e documentacao. Sem mudanca de funcionamento.",
+  "data": "2026-07-27"
 }

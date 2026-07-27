@@ -1,71 +1,73 @@
-<div align="center">
+# BancaPro
 
-# 📊 BancaPro
+Controle de banca e apostas esportivas. Arquivo único, roda offline, sem cadastro.
 
-**Gestão profissional de apostas esportivas**
+**Demo:** https://sandrolimadf1984.github.io/bancapro/
 
-Registre seus bilhetes, controle sua banca e acompanhe seus resultados com dados de verdade.
+## Por que existe
 
-[**▶ Abrir o app**](https://sandrolimadf1984.github.io/bancapro/)
+Eu anotava minhas apostas numa planilha e vivia perdendo o controle de quanto
+era depósito e quanto era bônus — que rendem de forma diferente e não faz sentido
+somar no mesmo saldo. Nenhum app que testei separava isso direito, então fiz o meu.
 
-</div>
+Ele **não aposta nada**: não conecta em casa de aposta, não tem link pra lugar
+nenhum, não movimenta dinheiro. Você aposta onde já aposta e registra aqui.
 
----
+## O que faz
 
-## Sobre
+- Banca separada em depósito e bônus, com saldo de cada um
+- Bilhete simples, múltipla e criar aposta
+- Múltipla resolvida jogo a jogo (green / red / null por partida)
+- Cash out
+- Mercados guiados: 1X2, over/under (total, tempos, casa, visitante), handicaps,
+  dupla chance, escanteios, cartões, placar exato, jogador pra marcar
+- Times por país e campeonato, com cadastro próprio
+- Estatísticas: lucro, ROI, yield, taxa de acerto, evolução da banca, desempenho
+  por mercado / casa / faixa de odd / dia da semana
+- Metas, agenda de jogos, stake sugerida, stop loss e stop win
+- PIN
+- PT / EN / ES
 
-O BancaPro é uma ferramenta de **registro e análise** para quem leva a sério a organização
-das próprias apostas. Ele não realiza apostas, não se conecta a casas de apostas e não
-movimenta dinheiro — é um caderno digital inteligente.
+## Stack
 
-Funciona **100% offline**, sem cadastro e sem anúncios. Todos os dados ficam salvos apenas
-no aparelho de quem usa.
+HTML, CSS e JavaScript puro, sem framework e sem build. O app inteiro é um
+`index.html` — Chart.js vai embutido no arquivo, então funciona offline e dá pra
+mandar por WhatsApp que abre. Persistência em `localStorage`.
 
-## Recursos
-
-- **Banca separada em depósito e bônus** — saldo total em destaque e cada conta discriminada
-- **Três tipos de bilhete** — simples, múltipla e criar aposta
-- **Múltipla resolvida jogo a jogo** — Green, Red ou Null em cada partida
-- **Cash Out** em bilhetes simples e múltiplos
-- **Seleções guiadas por mercado** — 1X2, Over/Under (total, tempos, casa e visitante),
-  handicaps, dupla chance, escanteios, cartões, placar exato, jogador para marcar e mais
-- **Times e campeonatos organizados** por país e competição, com cadastro próprio
-- **Estatísticas completas** — lucro, ROI, yield, taxa de acerto, evolução da banca e
-  desempenho por mercado, casa, faixa de odd e dia da semana
-- **Metas e agenda de jogos**
-- **Gestão de risco** — stake sugerida, stop loss e stop win diários
-- **Bloqueio por PIN**
-- **Três idiomas** — português, inglês e espanhol
-- **Atualização automática** — o app avisa quando há uma versão nova
-
-## Tecnologia
-
-Aplicativo de página única escrito em **HTML, CSS e JavaScript puro**, entregue como um
-**arquivo único** sem dependências externas em tempo de execução. Os gráficos usam Chart.js
-embutido e a persistência é feita no armazenamento local do navegador.
-
-A versão Android é empacotada com **Capacitor**, com sistema de atualização over-the-air.
+O Android é empacotado com Capacitor. Atualização de conteúdo vai por OTA
+(`@capgo/capacitor-updater`), lendo o `version.json` daqui do repositório —
+correção de tela não precisa esperar revisão da loja.
 
 ```
-bancapro/
-├── index.html                    aplicativo completo
-├── politica-de-privacidade.html  política de privacidade
-├── version.json                  controle de versão para atualizações
-└── bundles/                      pacotes de atualização
+index.html                    app inteiro
+politica-de-privacidade.html
+version.json                  versão publicada + checksum do bundle
+bundles/                      pacotes de atualização
 ```
+
+## Decisões que valem nota
+
+**Arquivo único.** Foi de propósito. Sem npm, sem bundler, sem servidor —
+abre com dois cliques em qualquer lugar e continua funcionando daqui a cinco anos.
+
+**i18n por camada.** Traduzo o DOM depois de renderizar, em vez de trocar tudo
+por chaves. O português continua sendo a fonte, então nenhum cálculo ou `value`
+de `<select>` muda junto quando troca de idioma.
+
+**Drawer com `margin-left`, não `transform`.** No WebView do Android a animação
+de transform travava no meio e o menu abria cortado. Com margin o layout é
+recalculado e não acontece.
 
 ## Privacidade
 
-Nenhum dado é coletado, enviado ou compartilhado. Não há servidores, login, rastreamento
-ou publicidade. Leia a [política de privacidade](https://sandrolimadf1984.github.io/bancapro/politica-de-privacidade.html).
+Não coleta, não envia, não compartilha nada. Sem servidor, sem login, sem
+rastreamento, sem anúncio. Os dados ficam no aparelho de quem usa.
 
 ## Aviso
 
-Destinado a maiores de 18 anos. Aposte com responsabilidade e apenas o que você pode perder.
-No Brasil, o CVV oferece apoio emocional gratuito pelo telefone **188**, 24 horas por dia.
+Maiores de 18 anos. Aposte com responsabilidade e só o que puder perder.
+CVV: 188 (gratuito, 24h).
 
 ---
 
-<div align="center">
-Desenvolvido por <a href="https://github.com/sandrolimadf1984">Sandro Lima</a>
-</div>
+Sandro Lima — [@sandrolimadf1984](https://github.com/sandrolimadf1984)

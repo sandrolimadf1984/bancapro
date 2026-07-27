@@ -209,6 +209,9 @@ html[data-theme="light"] nav.bottom{background:rgba(255,255,255,.92)}
 /* ================= DRAWER ================= */
 .drawer-bk{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; opacity:0;
   pointer-events:none; transition:opacity .25s}
+/* Drawer por margin-left e nao por translateX: no WebView do Android a
+   animacao de transform parava no meio e o menu abria cortado. Com margin o
+   layout e recalculado e nao acontece. Menos elegante, mas confiavel. */
 .drawer{position:fixed; top:0; bottom:0; left:0; z-index:41;
   width:86vw; max-width:322px; box-sizing:border-box;
   margin-left:-340px; transition:margin-left .28s ease;
@@ -596,19 +599,15 @@ html[data-theme="light"] .modal{background:#fff}
 <script>
 "use strict";
 
-/* ============================================================================
-   ██  ATUALIZAÇÃO AUTOMÁTICA — CONFIGURE AQUI  ██
-
-   ✅ JÁ ESTÁ CONFIGURADO PARA VOCÊ (github.com/sandrolimadf1984)
-
-   A ÚNICA COISA que você mexe aqui: aumente o APP_VERSION toda vez que
-   publicar uma melhoria.  Ex.: 1.0.0  ->  1.0.1  ->  1.0.2  ->  1.1.0
-   ============================================================================ */
+/* Atualizacao remota (OTA).
+   O bundle publicado no Pages carrega o version.json e compara com a versao
+   local. Precisa bater com o que o publicar-atualizacao.js gera, senao o
+   checksum nao confere e o download e recusado pelo plugin. */
 const APP_VERSION = '1.0.1';
 const OTA_URL = 'https://sandrolimadf1984.github.io/bancapro/version.json';
-/* ========================================================================== */
 
-/* Compara versões: 1.2.0 > 1.1.9 -> retorna 1 (a maior), -1, ou 0 */
+/* Comparacao campo a campo em vez de localeCompare: string "1.10.0" perde de
+   "1.9.0" na ordem lexicografica, e isso ja tinha me passado batido antes. */
 function verCmp(a, b){
   const pa = String(a||'0').split('.').map(n=>parseInt(n,10)||0);
   const pb = String(b||'0').split('.').map(n=>parseInt(n,10)||0);
@@ -690,16 +689,17 @@ function otaPrompt(info){
 /* Boot da atualização: avisa o plugin que o app abriu bem + checa em segundo plano */
 function otaBoot(){
   const up = otaPlugin();
-  if (up && up.notifyAppReady) { try { up.notifyAppReady(); } catch(e){} }  // evita rollback
+  // Sinaliza boot OK. Se nao chamar, o plugin assume que o bundle quebrou e
+  // reverte pra versao anterior no proximo start.
+  if (up && up.notifyAppReady) { try { up.notifyAppReady(); } catch(e){} }
   setTimeout(() => { otaCheck(false); }, 2500);
 }
 
-/* ============================================================================
-   ██  IDIOMAS (Português / English / Español)  ██
-   A camada abaixo TRADUZ o que aparece na tela sem mudar a lógica do app:
-   os valores internos continuam em português, só o texto exibido muda.
-   Português é o idioma-base; ao trocar, a tela é redesenhada e traduzida.
-   ============================================================================ */
+/* i18n por camada de traducao, nao por chaves.
+   Optei por traduzir o DOM depois da renderizacao em vez de trocar o app
+   inteiro para chaves: o PT continua sendo a fonte, entao nenhum calculo,
+   comparacao de status ou value de <select> muda de idioma junto. Foi o
+   caminho menos invasivo pra nao ter que reescrever cada tela. */
 const IDIOMAS = [
   { code:'pt', flag:'🇧🇷', nome:'Português' },
   { code:'en', flag:'🇺🇸', nome:'English' },
@@ -821,6 +821,9 @@ const I18N = {
 
 function tr(s){ if (LANG==='pt' || !s) return s; const d=I18N[LANG]; const k=String(s).trim(); return (d && d[k]) ? d[k] : s; }
 let _translating = false;
+/* Fixa o value original em PT antes de trocar o texto visivel. Sem isso o
+   <option> passa a devolver o texto traduzido e o construtor de selecao
+   monta a frase errada quando o app esta em EN/ES. */
 function _trNode(n, d){
   const raw = n.nodeValue; if (!raw) return; const key = raw.trim(); if (!key) return;
   const t = d[key]; if (!t) return;
@@ -1192,11 +1195,16 @@ const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(36).slice(2,9));
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const NF = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2, maximumFractionDigits:2});
+/* Zera residuo de ponto flutuante. Somatorio de lucro/prejuizo estava
+   fechando em -0.000001 e a tela exibia "-R$ 0,00", que assusta quem olha. */
 const snap0 = (v) => { const n = +v || 0; return Math.abs(n) < 0.005 ? 0 : n; };
 const fmt = (v) => 'R$ ' + NF.format(snap0(v));
 const fmtS = (v) => { const n = snap0(v); return (n>=0?'+':'-') + 'R$ ' + NF.format(Math.abs(n)); };
 const fmtPct = (v, d=1) => (isFinite(v) ? (+v).toFixed(d).replace('.',',') : '0') + '%';
 const num = (v) => { const n = parseFloat(String(v ?? '').replace(/\./g,'').replace(',','.')); return isFinite(n) ? n : parseFloat(v) || 0; };
+/* Aceita os dois formatos que aparecem na pratica: o BR (1.000,50) e o que o
+   teclado do celular manda quando a pessoa digita odd (4.65). Sem o teste do
+   tamanho do grupo, "4.65" virava 465. */
 const numRaw = (v) => {
   let s = String(v ?? '').trim().replace(/[^\d.,-]/g,'');
   if (!s) return 0;
