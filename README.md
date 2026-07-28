@@ -70,6 +70,7 @@ rastreamento, sem anúncio. Os dados ficam no aparelho de quem usa.
 Maiores de 18 anos. Aposte com responsabilidade e só o que puder perder.
 CVV: 188 (gratuito, 24h).
 
+## Em desenvolvimento desde 2025. Versão atual finalizada em julho de 2026.
 ---
 
 Sandro Lima — [@sandrolimadf1984](https://github.com/sandrolimadf1984)
