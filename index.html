@@ -461,6 +461,29 @@ html[data-theme="light"] .bar{background:rgba(11,93,42,.12)}
 .insight p{font-size:13px; color:var(--muted); margin-top:6px; line-height:1.55}
 .insight p b{color:var(--txt)}
 
+/* ================= CURIOSIDADES ================= */
+.cur-item{display:flex; align-items:center; gap:12px; padding:14px 16px; margin-bottom:9px; cursor:pointer}
+.cur-item:active{transform:scale(.985)}
+.cur-ic{flex:0 0 auto; width:38px; height:38px; border-radius:11px; display:grid; place-items:center;
+  background:rgba(255,255,255,.06); color:var(--gold)}
+.cur-ic svg{width:19px; height:19px}
+.cur-item.good .cur-ic{background:rgba(46,204,113,.14); color:var(--pos)}
+.cur-item.risk .cur-ic{background:rgba(231,76,60,.14); color:var(--neg)}
+.cur-item.warn .cur-ic{background:rgba(255,212,0,.14); color:var(--gold)}
+.cur-tx{flex:1 1 auto; min-width:0}
+.cur-tx h4{font-size:13.5px; font-weight:800; margin-bottom:2px}
+.cur-tx p{font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.cur-vl{flex:0 0 auto; display:flex; align-items:center; gap:4px; font-size:13px; font-weight:900; color:var(--gold)}
+.cur-vl svg{width:15px; height:15px; color:var(--muted-2)}
+.cur-item.good .cur-vl{color:var(--pos)}
+.cur-item.risk .cur-vl{color:var(--neg)}
+.cur-kpis{padding:4px 16px}
+.cur-kpi{display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:11px 0; border-bottom:1px solid var(--line-soft)}
+.cur-kpi:last-child{border-bottom:0}
+.cur-kpi span{font-size:12.5px; color:var(--muted)}
+.cur-kpi b{font-size:13px; font-weight:900}
+
 /* ================= CONFIG ================= */
 .set-row{display:flex; align-items:center; gap:14px; padding:15px 16px; cursor:pointer}
 .set-row + .set-row{border-top:1px solid var(--line-soft)}
@@ -603,7 +626,7 @@ html[data-theme="light"] .modal{background:#fff}
    O bundle publicado no Pages carrega o version.json e compara com a versao
    local. Precisa bater com o que o publicar-atualizacao.js gera, senao o
    checksum nao confere e o download e recusado pelo plugin. */
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
 const OTA_URL = 'https://sandrolimadf1984.github.io/bancapro/version.json';
 
 /* Comparacao campo a campo em vez de localeCompare: string "1.10.0" perde de
@@ -712,7 +735,16 @@ const I18N = {
     // menu / navegação
     'Dashboard':'Dashboard','Inserir Aposta':'Add Bet','Meus Bilhetes':'My Bets','Histórico':'History',
     'Estatísticas':'Statistics','Gestão de Banca':'Bankroll','Metas':'Goals','Agenda de Jogos':'Match Schedule',
-    'Inteligência Artificial':'Artificial Intelligence','Configurações':'Settings','Salvar agora':'Save now',
+    'Inteligência Artificial':'Artificial Intelligence','Curiosidades':'Fun Facts','Configurações':'Settings','Salvar agora':'Save now',
+    'Os recordes do seu histórico. Toque em qualquer um para ver o bilhete.':'Your all-time records. Tap any of them to see the bet.',
+    'Seus recordes':'Your records','Suas sequências':'Your streaks','Sem recordes ainda':'No records yet',
+    'Maior lucro em uma aposta':'Biggest profit on a single bet','Maior perda em uma aposta':'Biggest loss on a single bet',
+    'Maior odd que bateu':'Highest winning odds','Maior odd que não bateu':'Highest losing odds',
+    'Maior retorno em % sobre o valor apostado':'Best return as % of stake','Aposta com maior valor apostado':'Largest stake placed',
+    'Green mais seguro (menor odd)':'Safest win (lowest odds)','Melhor cash out':'Best cash out',
+    'Múltipla com mais jogos':'Multiple with most legs','Múltipla mais longa que bateu':'Longest winning multiple',
+    'Maior sequência de greens':'Longest winning streak','Maior sequência de reds':'Longest losing streak',
+    'Melhor dia':'Best day','Pior dia':'Worst day','Dia com mais apostas':'Busiest day','Apostas resolvidas':'Settled bets',
     'Banca:':'Bankroll:',
     // dashboard
     'Bem-vindo ao BancaPro 👋':'Welcome to BancaPro 👋','Configurar banca':'Set up bankroll','Ver com exemplo':'View with example',
@@ -771,7 +803,16 @@ const I18N = {
   es: {
     'Dashboard':'Panel','Inserir Aposta':'Añadir apuesta','Meus Bilhetes':'Mis apuestas','Histórico':'Historial',
     'Estatísticas':'Estadísticas','Gestão de Banca':'Gestión de banca','Metas':'Metas','Agenda de Jogos':'Agenda de partidos',
-    'Inteligência Artificial':'Inteligencia Artificial','Configurações':'Configuración','Salvar agora':'Guardar ahora',
+    'Inteligência Artificial':'Inteligencia Artificial','Curiosidades':'Curiosidades','Configurações':'Configuración','Salvar agora':'Guardar ahora',
+    'Os recordes do seu histórico. Toque em qualquer um para ver o bilhete.':'Los récords de tu historial. Toca cualquiera para ver la apuesta.',
+    'Seus recordes':'Tus récords','Suas sequências':'Tus rachas','Sem recordes ainda':'Aún sin récords',
+    'Maior lucro em uma aposta':'Mayor beneficio en una apuesta','Maior perda em uma aposta':'Mayor pérdida en una apuesta',
+    'Maior odd que bateu':'Cuota más alta acertada','Maior odd que não bateu':'Cuota más alta fallada',
+    'Maior retorno em % sobre o valor apostado':'Mejor retorno en % sobre el importe','Aposta com maior valor apostado':'Apuesta con mayor importe',
+    'Green mais seguro (menor odd)':'Acierto más seguro (cuota más baja)','Melhor cash out':'Mejor cash out',
+    'Múltipla com mais jogos':'Combinada con más partidos','Múltipla mais longa que bateu':'Combinada más larga acertada',
+    'Maior sequência de greens':'Mayor racha de aciertos','Maior sequência de reds':'Mayor racha de fallos',
+    'Melhor dia':'Mejor día','Pior dia':'Peor día','Dia com mais apostas':'Día con más apuestas','Apostas resolvidas':'Apuestas resueltas',
     'Banca:':'Banca:',
     'Bem-vindo ao BancaPro 👋':'Bienvenido a BancaPro 👋','Configurar banca':'Configurar banca','Ver com exemplo':'Ver con ejemplo',
     'SALDO DA BANCA':'SALDO DE LA BANCA','Saldo de depósito':'Saldo de depósito','Saldo de bônus':'Saldo de bono',
@@ -891,6 +932,7 @@ const IC = {
   pie:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 3a9 9 0 1 0 10 10H11z"/><path d="M13 2a9 9 0 0 1 9 9h-9z" opacity=".55"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5zm9 3.5a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L16 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L8 21h4l.4-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.2-.8.2-1.2z" transform="translate(1.5 0) scale(.92)"/></svg>',
   globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>',
+  sparkle:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l1.9 5.1 5.1 1.9-5.1 1.9L12 16.6l-1.9-5.1L5 9.6l5.1-1.9L12 2.6z"/><path d="M18.5 14.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4z" opacity=".75"/><path d="M5.5 15l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9L2.9 17.6l1.9-.7.7-1.9z" opacity=".55"/></svg>',
   calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
   brain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 3A3 3 0 0 0 6.6 5.2 3.3 3.3 0 0 0 4 8.4c0 .6.2 1.2.4 1.7A3.4 3.4 0 0 0 3 12.9c0 1.3.7 2.4 1.8 2.9A3.2 3.2 0 0 0 8 20.3c.6 0 1-.1 1.5-.4V3z"/><path d="M14.5 3a3 3 0 0 1 2.9 2.2 3.3 3.3 0 0 1 2.6 3.2c0 .6-.2 1.2-.4 1.7a3.4 3.4 0 0 1 1.4 2.8c0 1.3-.7 2.4-1.8 2.9a3.2 3.2 0 0 1-3.2 4.5c-.6 0-1-.1-1.5-.4V3z"/><path d="M9.5 8H7.4M9.5 13H6.8M14.5 8h2.1M14.5 13h2.7"/></svg>',
   wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h13v3"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1.3" fill="currentColor"/></svg>',
@@ -1439,6 +1481,7 @@ const MODULOS = [
   { r:'metas',        label:'Metas',                  icon:'target' },
   { r:'agenda',       label:'Agenda de Jogos',        icon:'calendar' },
   { r:'ia',           label:'Inteligência Artificial',icon:'brain' },
+  { r:'curiosidades', label:'Curiosidades',           icon:'sparkle' },
   { r:'config',       label:'Configurações',          icon:'gear' },
 ];
 const SCREENS = {}; // preenchido adiante: r -> função render
@@ -3218,6 +3261,147 @@ SCREENS.ia = function(sec){
 };
 
 /* ============================================================ CONFIGURAÇÕES */
+/* Curiosidades: recordes calculados na hora a partir do historico.
+   So entra aposta resolvida (pendente/em andamento nao tem resultado ainda).
+   Cada item guarda o id do bilhete pra reaproveitar o openBetDetail em vez de
+   montar outra tela de detalhe. */
+function curiosidadesCalc(){
+  const resolvidas = S.apostas.filter(a => ['Ganha','Perdida','Anulada','Cashout'].includes(a.status));
+  const out = [];
+  if (!resolvidas.length) return out;
+
+  const add = (o) => { if (o && o.bet) out.push(o); };
+  const oddTxt = (v) => String((+v || 0).toFixed(2)).replace('.', ',');
+  const maxBy = (lista, fn) => lista.reduce((m, a) => (m === null || fn(a) > fn(m)) ? a : m, null);
+  const minBy = (lista, fn) => lista.reduce((m, a) => (m === null || fn(a) < fn(m)) ? a : m, null);
+  const lucrativas = resolvidas.filter(a => lucroDe(a) > 0);
+  const perdedoras = resolvidas.filter(a => lucroDe(a) < 0);
+  const greens = resolvidas.filter(a => a.status === 'Ganha');
+  const reds   = resolvidas.filter(a => a.status === 'Perdida');
+
+  const b1 = maxBy(lucrativas, lucroDe);
+  add(b1 && { icon:'trophy', tipo:'good', titulo:'Maior lucro em uma aposta',
+    valor:fmtS(lucroDe(b1)), bet:b1 });
+
+  const b2 = minBy(perdedoras, lucroDe);
+  add(b2 && { icon:'alert', tipo:'risk', titulo:'Maior perda em uma aposta',
+    valor:fmtS(lucroDe(b2)), bet:b2 });
+
+  const b3 = maxBy(greens, a => +a.odd || 0);
+  add(b3 && { icon:'trendUp', tipo:'good', titulo:'Maior odd que bateu',
+    valor:'odd ' + oddTxt(b3.odd), bet:b3 });
+
+  const b4 = maxBy(reds, a => +a.odd || 0);
+  add(b4 && { icon:'flag', tipo:'warn', titulo:'Maior odd que não bateu',
+    valor:'odd ' + oddTxt(b4.odd), bet:b4 });
+
+  /* Retorno percentual sobre o valor apostado. Cashout entra aqui porque
+     e onde ele aparece melhor: um cashout de 40% do stake nao ganha em
+     valor absoluto, mas em percentual pode ser o melhor da lista. */
+  const pct = (a) => { const v = +a.valor || 0; return v > 0 ? (lucroDe(a) / v) * 100 : -Infinity; };
+  const b5 = maxBy(lucrativas, pct);
+  add(b5 && { icon:'bars', tipo:'good', titulo:'Maior retorno em % sobre o valor apostado',
+    valor:'+' + pct(b5).toFixed(1).replace('.', ',') + '%', bet:b5 });
+
+  const b6 = maxBy(resolvidas, a => +a.valor || 0);
+  add(b6 && { icon:'wallet', tipo:'', titulo:'Aposta com maior valor apostado',
+    valor:fmt(+b6.valor || 0), bet:b6 });
+
+  const b7 = minBy(lucrativas, a => +a.odd || Infinity);
+  add(b7 && { icon:'check', tipo:'', titulo:'Green mais seguro (menor odd)',
+    valor:'odd ' + oddTxt(b7.odd), bet:b7 });
+
+  const cashouts = resolvidas.filter(a => a.status === 'Cashout');
+  const b8 = maxBy(cashouts, lucroDe);
+  add(b8 && { icon:'clock', tipo:'', titulo:'Melhor cash out',
+    valor:fmtS(lucroDe(b8)), bet:b8 });
+
+  const multis = resolvidas.filter(a => (a.tipo || 'simples') === 'multipla' && a.jogos);
+  const b9 = maxBy(multis, a => a.jogos.length);
+  add(b9 && { icon:'ticket', tipo:'', titulo:'Múltipla com mais jogos',
+    valor:b9.jogos.length + (b9.jogos.length === 1 ? ' jogo' : ' jogos'), bet:b9 });
+
+  const b10 = maxBy(multis.filter(a => a.status === 'Ganha'), a => a.jogos.length);
+  add(b10 && { icon:'trophy', tipo:'good', titulo:'Múltipla mais longa que bateu',
+    valor:b10.jogos.length + (b10.jogos.length === 1 ? ' jogo' : ' jogos'), bet:b10 });
+
+  return out;
+}
+
+/* Sequencias e numeros gerais. Percorre em ordem de data pra que a maior
+   sequencia seja a real e nao a ordem de cadastro. */
+function curiosidadesResumo(){
+  const res = S.apostas
+    .filter(a => ['Ganha','Perdida','Cashout'].includes(a.status))
+    .slice()
+    .sort((x, y) => String(x.data || '').localeCompare(String(y.data || '')));
+  if (!res.length) return null;
+
+  let seqG = 0, maxG = 0, seqR = 0, maxR = 0;
+  res.forEach(a => {
+    if (a.status === 'Ganha') { seqG++; maxG = Math.max(maxG, seqG); seqR = 0; }
+    else if (a.status === 'Perdida') { seqR++; maxR = Math.max(maxR, seqR); seqG = 0; }
+    else { seqG = 0; seqR = 0; }
+  });
+
+  const porDia = {};
+  res.forEach(a => { const d = a.data || ''; porDia[d] = (porDia[d] || 0) + lucroDe(a); });
+  const dias = Object.entries(porDia);
+  const melhorDia = dias.reduce((m, x) => (!m || x[1] > m[1]) ? x : m, null);
+  const piorDia   = dias.reduce((m, x) => (!m || x[1] < m[1]) ? x : m, null);
+  const maisAtivo = Object.entries(res.reduce((acc, a) => {
+    const d = a.data || ''; acc[d] = (acc[d] || 0) + 1; return acc;
+  }, {})).reduce((m, x) => (!m || x[1] > m[1]) ? x : m, null);
+
+  return { maxG, maxR, melhorDia, piorDia, maisAtivo, total:res.length };
+}
+
+SCREENS.curiosidades = function(sec){
+  const itens = curiosidadesCalc();
+  const rs = curiosidadesResumo();
+  sec.innerHTML = `
+    <div class="h1">Curiosidades</div>
+    <p class="sub">Os recordes do seu histórico. Toque em qualquer um para ver o bilhete.</p>
+    <div id="curBody"></div>`;
+  const body = $('#curBody', sec);
+
+  if (!itens.length){
+    body.innerHTML = `<div class="card empty">${ic('sparkle')}<h4>Sem recordes ainda</h4>
+      <p>Resolva algumas apostas (green, red ou cash out) e os seus recordes aparecem aqui.</p></div>`;
+    return;
+  }
+
+  const linhas = itens.map((c, i) => `
+    <div class="card cur-item ${c.tipo}" data-i="${i}">
+      <div class="cur-ic">${ic(c.icon)}</div>
+      <div class="cur-tx">
+        <h4>${esc(c.titulo)}</h4>
+        <p>${esc(c.bet.tipo === 'multipla' ? 'Múltipla · ' + (c.bet.jogos ? c.bet.jogos.length : 0) + ' jogos' : (c.bet.partida || 'Aposta'))}</p>
+      </div>
+      <div class="cur-vl">${c.valor}${ic('chevR')}</div>
+    </div>`).join('');
+
+  let resumo = '';
+  if (rs){
+    const item = (lbl, val, cor) => `<div class="cur-kpi"><span>${lbl}</span><b style="color:${cor||'var(--txt)'}">${val}</b></div>`;
+    resumo = `
+      <div class="sect">Suas sequências</div>
+      <div class="card cur-kpis">
+        ${item('Maior sequência de greens', rs.maxG + (rs.maxG === 1 ? ' aposta' : ' apostas'), 'var(--pos)')}
+        ${item('Maior sequência de reds', rs.maxR + (rs.maxR === 1 ? ' aposta' : ' apostas'), 'var(--neg)')}
+        ${rs.melhorDia ? item('Melhor dia', dBR(rs.melhorDia[0]) + ' · ' + fmtS(rs.melhorDia[1]), 'var(--pos)') : ''}
+        ${rs.piorDia ? item('Pior dia', dBR(rs.piorDia[0]) + ' · ' + fmtS(rs.piorDia[1]), 'var(--neg)') : ''}
+        ${rs.maisAtivo ? item('Dia com mais apostas', dBR(rs.maisAtivo[0]) + ' · ' + rs.maisAtivo[1] + (rs.maisAtivo[1] === 1 ? ' aposta' : ' apostas')) : ''}
+        ${item('Apostas resolvidas', rs.total)}
+      </div>`;
+  }
+
+  body.innerHTML = `<div class="sect">Seus recordes</div>${linhas}${resumo}`;
+  $$('#curBody .cur-item').forEach(el => {
+    el.onclick = () => { const c = itens[+el.dataset.i]; if (c) openBetDetail(c.bet.id); };
+  });
+};
+
 SCREENS.config = function(sec){
   const st = S.settings;
   const sw = (id, on) => `<label class="switch"><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></label>`;

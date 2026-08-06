@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
-  "url": "https://sandrolimadf1984.github.io/bancapro/bundles/bancapro-1.0.1.zip",
-  "checksum": "a742c309b3020574d82cbbb6ec32b2c8ee0b1232fb22d5cf6860ed62c124c436",
-  "notas": "Organizacao interna do codigo e documentacao. Sem mudanca de funcionamento.",
-  "data": "2026-07-27"
+  "version": "1.0.2",
+  "url": "https://sandrolimadf1984.github.io/bancapro/bundles/bancapro-1.0.2.zip",
+  "checksum": "bfa462886ad947c7b139dd93fd6f29b1ad71cb4d1f65ea4aabb4cf305d515631",
+  "notas": "Nova tela Curiosidades: recordes do seu historico (maior lucro, maior perda, maior odd, melhor cash out e mais). Toque em cada um para abrir o bilhete.",
+  "data": "2026-08-06"
 }
